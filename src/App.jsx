@@ -1,4 +1,4 @@
-const App = () => {
+function App() {
   return (
     <>
       <h1>Hellou world</h1>
