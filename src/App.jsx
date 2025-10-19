@@ -1,9 +1,9 @@
 const App = () => {
-  return ( 
+  return (
     <>
       <h1>Hellou world</h1>
     </>
-   );
+  )
 }
- 
-export default App;
+
+export default App
