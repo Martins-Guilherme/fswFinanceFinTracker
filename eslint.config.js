@@ -36,10 +36,6 @@ export default [
       'react/prop-types': 'off',
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
-      'react-refresh/only-export-components': [
-        'off',
-        { allowConstantExport: true },
-      ],
     },
   },
   eslintConfigPrettier,
