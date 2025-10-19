@@ -1,7 +1,9 @@
+import { Button } from './components/ui/button'
+
 function App() {
   return (
     <>
-      <h1>Hellou world</h1>
+      <Button>Hello world!</Button>
     </>
   )
 }

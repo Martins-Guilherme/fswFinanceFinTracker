@@ -33,10 +33,11 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react/jsx-no-target-blank': 'off',
       'no-unused-vars': 'error',
+      'react/prop-types': 'off',
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
       'react-refresh/only-export-components': [
-        'warn',
+        'off',
         { allowConstantExport: true },
       ],
     },
