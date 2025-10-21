@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 import { Toaster } from 'sonner'
@@ -61,7 +61,7 @@ const signupSchema = z
   })
 
 const SignUpPage = () => {
-  const [user, setUser] = useState()
+  const [user, setUser] = useState(null)
 
   const signupMutation = useMutation({
     mutationKey: ['signup'],
@@ -82,13 +82,13 @@ const SignUpPage = () => {
         const accessToken = createdUser.tokens.accessToken
         const refreshToken = createdUser.tokens.refreshToken
         setUser(createdUser)
-        localStorage.setItem('accesstoken', accessToken)
-        localStorage.setItem('refreshtoken', refreshToken)
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('refreshToken', refreshToken)
         Toaster.success('Conta criada com sucesso!')
       },
       onError: () => {
         Toaster.error(
-          'Erro ao crari a conta. Por favor tente novamente mais tarde.'
+          'Erro ao criar a conta. Por favor tente novamente mais tarde.'
         )
       },
     })
@@ -106,6 +106,26 @@ const SignUpPage = () => {
     },
   })
 
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+        const refreshToken = localStorage.getItem('refreshToken')
+        if (!accessToken && !refreshToken) return
+        const response = await api.get('/users/me', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        setUser(response.data)
+      } catch (error) {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        console.error(error)
+      }
+    }
+    init()
+  }, [])
   if (user) {
     return <h1>Ola {user.first_name}!</h1>
   }
