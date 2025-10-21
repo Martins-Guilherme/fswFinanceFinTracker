@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import HomePage from './pages/home.jsx'
 import LoginPage from './pages/login.jsx'
 import NotFoundPage from './pages/not-found.jsx'
-import SignUp from './pages/signUp.jsx'
+import SignUpPage from './pages/signUp.jsx'
 
 const queryClient = new QueryClient()
 
@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
