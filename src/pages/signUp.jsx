@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
-import { Toaster } from 'sonner'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import PasswordInput from '@/components/password-input'
@@ -84,10 +84,11 @@ const SignUpPage = () => {
         setUser(createdUser)
         localStorage.setItem('accessToken', accessToken)
         localStorage.setItem('refreshToken', refreshToken)
-        Toaster.success('Conta criada com sucesso!')
+        toast.success('Conta criada com sucesso!')
+        console.log(data)
       },
       onError: () => {
-        Toaster.error(
+        toast.error(
           'Erro ao criar a conta. Por favor tente novamente mais tarde.'
         )
       },
@@ -118,10 +119,9 @@ const SignUpPage = () => {
           },
         })
         setUser(response.data)
-      } catch (error) {
+      } catch {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
-        console.error(error)
       }
     }
     init()
