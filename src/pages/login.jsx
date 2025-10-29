@@ -1,9 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
 import PasswordInput from '@/components/password-input'
@@ -25,7 +23,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { api } from '@/lib/axios'
+import { AuthContext } from '@/contexts/auth'
 
 const loginSchema = z.object({
   email: z
@@ -43,36 +41,9 @@ const loginSchema = z.object({
 })
 
 const LoginPage = () => {
-  const [user, setUser] = useState(null)
+  const { user, login } = useContext(AuthContext)
 
-  const loginMutation = useMutation({
-    mutationKey: ['login'],
-    mutationFn: async (variables) => {
-      const response = await api.post('/users/login', {
-        email: variables.email,
-        password: variables.password,
-      })
-      return response.data
-    },
-  })
-
-  const handleSubmit = (data) => {
-    loginMutation.mutate(data, {
-      onSuccess: (loggedUser) => {
-        const accessToken = loggedUser.tokens.accessToken
-        const refreshToken = loggedUser.tokens.refreshToken
-        localStorage.setItem('accessToken', accessToken)
-        localStorage.setItem('refreshToken', refreshToken)
-        toast.success('Conta logada com sucesso!')
-        setUser(loggedUser)
-      },
-      onError: () => {
-        toast.error(
-          'Erro ao logar na conta. Por favor tente novamente mais tarde.'
-        )
-      },
-    })
-  }
+  const handleSubmit = (data) => login(data)
 
   const methods = useForm({
     resolver: zodResolver(loginSchema),
@@ -82,25 +53,6 @@ const LoginPage = () => {
     },
   })
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const accessToken = localStorage.getItem('accessToken')
-        const refreshToken = localStorage.getItem('refreshToken')
-        if (!accessToken && !refreshToken) return
-        const response = await api.get('/users/me', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        setUser(response.data)
-      } catch {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-      }
-    }
-    init()
-  }, [])
   if (user) {
     return <h1>Ola {user.first_name}!</h1>
   }

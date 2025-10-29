@@ -7,7 +7,7 @@ import { api } from '@/lib/axios'
 export const AuthContext = createContext({
   user: null,
   login: () => {},
-  sugnup: () => {},
+  signup: () => {},
 })
 
 export const AuthContentProvider = ({ children }) => {
@@ -19,6 +19,17 @@ export const AuthContentProvider = ({ children }) => {
       const response = await api.post('/users', {
         first_name: variables.firstName,
         last_name: variables.lastName,
+        email: variables.email,
+        password: variables.password,
+      })
+      return response.data
+    },
+  })
+
+  const loginMutation = useMutation({
+    mutationKey: ['login'],
+    mutationFn: async (variables) => {
+      const response = await api.post('/users/login', {
         email: variables.email,
         password: variables.password,
       })
@@ -40,6 +51,24 @@ export const AuthContentProvider = ({ children }) => {
       onError: () => {
         toast.error(
           'Erro ao criar a conta. Por favor tente novamente mais tarde.'
+        )
+      },
+    })
+  }
+
+  const login = (data) => {
+    loginMutation.mutate(data, {
+      onSuccess: (loggedUser) => {
+        const accessToken = loggedUser.tokens.accessToken
+        const refreshToken = loggedUser.tokens.refreshToken
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('refreshToken', refreshToken)
+        toast.success('Conta logada com sucesso!')
+        setUser(loggedUser)
+      },
+      onError: () => {
+        toast.error(
+          'Erro ao logar na conta. Por favor tente novamente mais tarde.'
         )
       },
     })
@@ -67,9 +96,9 @@ export const AuthContentProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user: user,
-        login: () => {},
-        signup: signup,
+        user,
+        login,
+        signup,
       }}
     >
       {children}

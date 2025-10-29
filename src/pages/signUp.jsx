@@ -61,9 +61,7 @@ const signupSchema = z
 const SignUpPage = () => {
   const { user, signup } = useContext(AuthContext)
 
-  const handleSubmit = (data) => {
-    signup(data)
-  }
+  const handleSubmit = (data) => signup(data)
 
   const methods = useForm({
     resolver: zodResolver(signupSchema),
