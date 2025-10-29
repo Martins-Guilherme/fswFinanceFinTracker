@@ -12,6 +12,19 @@ export const AuthContext = createContext({
   signup: () => {},
 })
 
+const LOCAL_STORAGE_ACCESS_TOKEN_KEY = 'accessToken'
+const LOCAL_STORAGE_REFRESH_TOKEN_KEY = 'refreshToken'
+
+const setTokens = (tokens) => {
+  localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, tokens.accessToken)
+  localStorage.setItem(LOCAL_STORAGE_REFRESH_TOKEN_KEY, tokens.refreshToken)
+}
+
+const removeTokens = () => {
+  localStorage.removeItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY)
+  localStorage.removeItem(LOCAL_STORAGE_REFRESH_TOKEN_KEY)
+}
+
 export const AuthContentProvider = ({ children }) => {
   const [user, setUser] = useState()
 
@@ -42,11 +55,8 @@ export const AuthContentProvider = ({ children }) => {
   const signup = (data) => {
     signupMutation.mutate(data, {
       onSuccess: (createdUser) => {
-        const accessToken = createdUser.tokens.accessToken
-        const refreshToken = createdUser.tokens.refreshToken
         setUser(createdUser)
-        localStorage.setItem('accessToken', accessToken)
-        localStorage.setItem('refreshToken', refreshToken)
+        setTokens(createdUser.tokens)
         toast.success('Conta criada com sucesso!')
         console.log(data)
       },
@@ -61,12 +71,9 @@ export const AuthContentProvider = ({ children }) => {
   const login = (data) => {
     loginMutation.mutate(data, {
       onSuccess: (loggedUser) => {
-        const accessToken = loggedUser.tokens.accessToken
-        const refreshToken = loggedUser.tokens.refreshToken
-        localStorage.setItem('accessToken', accessToken)
-        localStorage.setItem('refreshToken', refreshToken)
-        toast.success('Conta logada com sucesso!')
         setUser(loggedUser)
+        setTokens(loggedUser.tokens)
+        toast.success('Conta logada com sucesso!')
       },
       onError: () => {
         toast.error(
@@ -79,8 +86,10 @@ export const AuthContentProvider = ({ children }) => {
   useEffect(() => {
     const init = async () => {
       try {
-        const accessToken = localStorage.getItem('accessToken')
-        const refreshToken = localStorage.getItem('refreshToken')
+        const accessToken = localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY)
+        const refreshToken = localStorage.getItem(
+          LOCAL_STORAGE_REFRESH_TOKEN_KEY
+        )
         if (!accessToken && !refreshToken) return
         const response = await api.get('/users/me', {
           headers: {
@@ -89,8 +98,7 @@ export const AuthContentProvider = ({ children }) => {
         })
         setUser(response.data)
       } catch {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
+        removeTokens()
       }
     }
     init()
