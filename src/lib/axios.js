@@ -33,7 +33,7 @@ protectedApi.interceptors.response.use(
     }
 
     if (
-      error.response.status === 401 &&
+      error?.response.status === 401 &&
       !request._retry &&
       !request.url.includes('/users/refresh-token')
     ) {
