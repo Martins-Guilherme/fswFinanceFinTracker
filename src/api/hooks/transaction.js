@@ -13,15 +13,11 @@ export const useCreateTransaction = () => {
   const { user } = useAuthContext()
   return useMutation({
     mutationKey: createTransactionKey,
-    mutationFn: (input) => {
-      ;(TransactionService.create(input),
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: getBalanceQueryKey({ userId: user.id }),
-            })
-          },
-        })
+    mutationFn: (input) => TransactionService.create(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: getBalanceQueryKey({ userId: user.id }),
+      })
     },
   })
 }
