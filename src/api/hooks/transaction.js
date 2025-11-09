@@ -40,3 +40,23 @@ export const useGetTransactions = ({ from, to }) => {
     enabled: Boolean(from) && Boolean(to) && Boolean(user.id),
   })
 }
+
+export const editTransactionKey = ['editTransaction']
+
+export const useEditTransaction = () => {
+  const queryClient = useQueryClient()
+
+  const { user } = useAuthContext()
+  return useMutation({
+    mutationKey: editTransactionKey,
+    mutationFn: (input) => TransactionService.update(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: getBalanceQueryKey({ userId: user.id }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: getTransactionsQueryKey({ userId: user.id }),
+      })
+    },
+  })
+}
