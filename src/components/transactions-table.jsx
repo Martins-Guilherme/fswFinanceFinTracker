@@ -61,7 +61,7 @@ const TransactionsTable = () => {
   return (
     <>
       <h2 className="text-2xl font-bold">Transações</h2>
-      <ScrollArea className="h-[300px] max-h-[300px] rounded-md border">
+      <ScrollArea className="h-[250px] max-h-[250px] rounded-md border">
         <DataTable columns={columns} data={transactions} />
       </ScrollArea>
     </>
