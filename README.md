@@ -47,7 +47,8 @@ Clone o repositório
 - cd fintrack
 
 Instale as dependências
-npm install
+
+- npm install
 
 Inicie o app em modo desenvolvimento
 
