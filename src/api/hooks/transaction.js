@@ -60,3 +60,22 @@ export const useEditTransaction = () => {
     },
   })
 }
+
+export const deleteTransactionMutationKey = (id) => ['deleteTransaction', id]
+
+export const useDeleteTransaction = (id) => {
+  const queryClient = useQueryClient()
+  const { user } = useAuthContext()
+  return useMutation({
+    mutationKey: deleteTransactionMutationKey,
+    mutationFn: () => TransactionService.delete({ id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: getBalanceQueryKey({ userId: user.id }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: getTransactionsQueryKey({ userId: user.id }),
+      })
+    },
+  })
+}

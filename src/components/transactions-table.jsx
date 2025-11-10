@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router'
 import { useGetTransactions } from '@/api/hooks/transaction'
 import { formatCurrency } from '@/helpers/currency'
 
+import DeleteTransactionButton from './delete-transaction-button'
 import EditTransactionButton from './edit-transaction-button'
 import TransactioTypeBadge from './transaction-type-badge'
 import { DataTable } from './ui/data-table'
@@ -42,7 +43,12 @@ const columns = [
     accessorKey: 'actions',
     header: 'Ações',
     cell: ({ row: { original: transaction } }) => {
-      return <EditTransactionButton transaction={transaction} />
+      return (
+        <div>
+          <EditTransactionButton transaction={transaction} />
+          <DeleteTransactionButton transactionId={transaction.id} />
+        </div>
+      )
     },
   },
 ]
