@@ -50,8 +50,8 @@ const EditTransactionButton = ({ transaction }) => {
           <ExternalLinkIcon className="text-muted-foreground" />
         </Button>
       </SheetTrigger>
-      <SheetContent className="min-w-[500px]">
-        <SheetTitle>Editar tranasção</SheetTitle>
+      <SheetContent className="min-w-[250px] sm:min-w-[450px]">
+        <SheetTitle>Editar transação</SheetTitle>
         <Form {...form}>
           <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
             {/* NOME DA TRANSAÇÃO */}
@@ -121,7 +121,7 @@ const EditTransactionButton = ({ transaction }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tipo</FormLabel>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-3">
                     {/* EARNING - GANHOS */}
                     <Button
                       type="button"
@@ -160,7 +160,7 @@ const EditTransactionButton = ({ transaction }) => {
                 </FormItem>
               )}
             />
-            <SheetFooter className="sm:space-x-4">
+            <SheetFooter className="flex gap-2 sm:space-x-4">
               <SheetClose asChild>
                 <Button type="reset" variant="secondary" className="w-full">
                   Cancelar
