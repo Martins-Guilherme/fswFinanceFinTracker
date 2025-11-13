@@ -16,7 +16,7 @@ const TransactionTypeChart = () => {
 
   return (
     <Card className="flex flex-col">
-      <CardContent className="flex flex-auto items-center justify-center pb-0">
+      <CardContent className="m-5 grid grid-cols-1 p-5">
         {/* ITENS */}
         <div className="space-y-8">
           <TransactionTypeChartLabel
