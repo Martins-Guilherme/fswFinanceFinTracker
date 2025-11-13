@@ -29,7 +29,7 @@ export function DataTable({ columns, data }) {
   })
 
   return (
-    <Table>
+    <Table className="min-w-full">
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
@@ -56,7 +56,7 @@ export function DataTable({ columns, data }) {
               data-state={row.getIsSelected() && 'selected'}
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell key={cell.id} className="p-0 text-center sm:size-1">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
